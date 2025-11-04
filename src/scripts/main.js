@@ -2,7 +2,7 @@
 
 // Найди и получи список из документа.
 
-// Создай функцию sortulElement, которая принимает список (ulElement) и
+// Создай функцию sortlist, которая принимает список (list) и
 // сортирует его элементы по убыванию зарплаты, взятой из data-атрибута.
 
 // Зарплата в data-атрибуте хранится как строка, н
@@ -12,7 +12,7 @@
 
 // После сортировки добавь (append) отсортированные элементы обратно в список.
 
-// Создай функцию getEmployees, которая принимает список (ulElement)
+// Создай функцию getEmployees, которая принимает список (list)
 // и возвращает массив правильных объектов (из элементов списка).
 
 // Вызови обе функции.
@@ -20,12 +20,14 @@
 // Готово.
 const list = document.querySelector('ul');
 
+// Вспомогательная функция — приводит зарплату к числу
 function parseSalary(salaryStr) {
-  return salaryStr.replace(/[$,]/g, '');
+  return Number(salaryStr.replace(/[$,]/g, ''));
 }
+/* eslint-disable no-shadow */
 
-function sortList(ulElement) {
-  const li = Array.from(ulElement.children);
+function sortList(list) {
+  const li = Array.from(list.children);
   // console.log(li);
 
   li.sort((a, b) => {
@@ -35,14 +37,14 @@ function sortList(ulElement) {
     return salaryB - salaryA;
   });
 
-  ulElement.innerHTML = '';
+  list.innerHTML = '';
 
   for (const ch of li) {
-    ulElement.append(ch);
+    list.append(ch);
   }
   // Возвращаем массив объектов сотрудников
 
-  return getEmployees(ulElement);
+  return getEmployees(list);
 }
 
 // Функция getEmployees превращает набор узлов в объекты с которыми
@@ -50,15 +52,15 @@ function sortList(ulElement) {
 // и так дальше. А HTML(DOM) это визуальный слой, который просто
 // показывает информацию без возмоности работы с ней.
 
-function getEmployees(ulElement) {
+function getEmployees(list) {
   const arr = [];
 
-  for (const worker of ulElement.children) {
+  for (const worker of list.children) {
     const obj = {
       name: worker.textContent.trim(),
       position: worker.dataset.position,
-      salary: worker.dataset.salary,
-      age: worker.dataset.age,
+      salary: parseSalary(worker.dataset.salary),
+      age: Number(worker.dataset.age),
     };
 
     arr.push(obj);
@@ -67,10 +69,10 @@ function getEmployees(ulElement) {
   return arr;
 }
 
-// sortulElement() → вызывает getEmployees(list) → getEmployees
+// sortlist() → вызывает getEmployees(list) → getEmployees
 
-// возвращает массив объектов → sortulElement возвращает этот массив наружу
+// возвращает массив объектов → sortlist возвращает этот массив наружу
 
-// const li = Array.from(ulElement.children); работает со всеми детьми тега ul.
+// const li = Array.from(list.children); работает со всеми детьми тега ul.
 
 sortList(list);
